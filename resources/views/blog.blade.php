@@ -89,7 +89,7 @@
                                 <div class="col-lg-4 mb-30">
                                     <div class="card-grid-3 hover-up">
                                         <div class="text-center card-grid-3-image "><a
-                                                href="/resources/blog/{{ $blog->slug }}">
+                                                href="{{route("blogDetails", [$blog->slug])}}">
                                                 <figure><img src="{{ $blog->cover_photo }}"
                                                         alt="{{ $blog->post_title }}">
                                                 </figure>
@@ -107,7 +107,7 @@
                                                 </div>
                                             @endif
                                             <h5><a
-                                                    href="/resources/blog/{{ $blog->slug }}">{{ $blog->post_title }}</a>
+                                                    href="{{route("blogDetails", [$blog->slug])}}">{{ $blog->post_title }}</a>
                                             </h5>
                                             <p class="mt-10 color-text-paragraph font-sm truncate-text">
                                                 {{ strip_tags($blog->blog_post) }}</p>
