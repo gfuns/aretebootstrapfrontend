@@ -69,6 +69,7 @@
                             <button class="show-all-tgl-btn">See More</button>
                         </div>
 
+                        @if(Auth::user())
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                             class="menu-item">
@@ -80,6 +81,7 @@
                                 {{ csrf_field() }}
                             </form>
                         </a>
+                        @endif
 
                     </div>
                 </div>
