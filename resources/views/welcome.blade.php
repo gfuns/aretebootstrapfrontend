@@ -165,25 +165,16 @@
                 </div>
                 </section>
             </div>
-            <div>
+            {{-- <div>
                 <div class="section-box mb-30">
                     <div class="container">
                         <div class="box-we-hiring">
                             <img src="{{ asset("images/coza_advert.jpg") }}"/>
-                            {{-- <div class="box-we-hiring-before page_speed_1341285398"></div>
-                            <div class="text-1"><span class="text-we-are">We are</span><span
-                                    class="text-hiring">HIRING</span></div>
-                            <div class="text-2"> Let’s <span class="color-brand-1">Work</span> Together
-                                <br>&amp;<span class="color-brand-1"> Explore</span> Opportunities
-                            </div>
-                            <div class="text-3"><a href="#">
-                                    <div class="btn btn-apply btn-apply-icon">Apply</div>
-                                </a></div>
-                            <div class="box-we-hiring-after page_speed_200008368"></div> --}}
+
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div>
                 <section class="section-box mt-50 top-companies">
                     <div class="container">
@@ -333,7 +324,7 @@
                                                 <div
                                                     class="card-grid-3 hover-up wow animate__animated animate__fadeIn">
                                                     <div class="text-center card-grid-3-image"><a
-                                                            href="/blog/details/{{ $bp->slug }}">
+                                                            href="{{route("blogDetails", [$bp->slug])}}">
                                                             <figure><img alt="#" src="{{ $bp->cover_photo }}">
                                                             </figure>
                                                         </a></div>
@@ -351,7 +342,7 @@
                                                         @endif
 
                                                         <h5><a
-                                                                href="/blog/details/{{ $bp->slug }}">{{ $bp->post_title }}</a>
+                                                                href="{{route("blogDetails", [$bp->slug])}}">{{ $bp->post_title }}</a>
                                                         </h5>
                                                         <p class="mt-10 color-text-paragraph font-sm post-description">
                                                             {{ strip_tags($bp->blog_post) }}
