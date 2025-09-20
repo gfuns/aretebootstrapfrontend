@@ -141,7 +141,11 @@
                                                                 src="{{ $cat->category_icon == null ? 'https://res.cloudinary.com/soha/image/upload/v1701601099/fvnn5nrxg9m4di9jjrux.png' : $cat->category_icon }}"
                                                                 alt="Content Writer"></div>
                                                         <div class="text-info-right">
-                                                            <div class="h6">{{ ucwords(strtolower(substr($cat->category_name, 0, 16))) }}@if (strlen($cat->category_name) > 16)...@endif
+                                                            <div class="h6">
+                                                                {{ ucwords(strtolower(substr($cat->category_name, 0, 16))) }}
+                                                                @if (strlen($cat->category_name) > 16)
+                                                                    ...
+                                                                @endif
                                                             </div>
                                                             <p class="font-xs"> {{ $cat->businesses }} <span> Listing(s)
                                                                     Available</span>
@@ -182,7 +186,7 @@
                             <h2 class="section-title mb-10 wow animate__animated animate__fadeInUp">Top
                                 <span class="color-brand-2" style="color:#690068">Businesses</span>
                             </h2>
-                             <p class="font-lg color-text-paragraph-2 wow animate__animated animate__fadeInUp">
+                            <p class="font-lg color-text-paragraph-2 wow animate__animated animate__fadeInUp">
                                 Discover your next favorite business today. Connect, Explore and Transact with local
                                 businesses around you</p>
                         </div>
@@ -324,7 +328,7 @@
                                                 <div
                                                     class="card-grid-3 hover-up wow animate__animated animate__fadeIn">
                                                     <div class="text-center card-grid-3-image"><a
-                                                            href="{{route("blogDetails", [$bp->slug])}}">
+                                                            href="{{ route('blogDetails', [$bp->slug]) }}">
                                                             <figure><img alt="#" src="{{ $bp->cover_photo }}">
                                                             </figure>
                                                         </a></div>
@@ -342,7 +346,7 @@
                                                         @endif
 
                                                         <h5><a
-                                                                href="{{route("blogDetails", [$bp->slug])}}">{{ $bp->post_title }}</a>
+                                                                href="{{ route('blogDetails', [$bp->slug]) }}">{{ $bp->post_title }}</a>
                                                         </h5>
                                                         <p class="mt-10 color-text-paragraph font-sm post-description">
                                                             {{ strip_tags($bp->blog_post) }}
@@ -402,58 +406,62 @@
             </div>
 
             <div>
-                <section class="section mt-50">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-6">
-                                <div class="section-title text-center mb-4 pb-2">
-                                    <h2 class="text-center mb-15 wow animate__animated animate__fadeInUp"> Our Happy
-                                        Customers </h2>
-                                    <div
-                                        class="font-lg color-text-paragraph-2 text-center wow animate__animated animate__fadeInUp">
-                                        Here Is What Our Users Have to Say: Real Stories, Real Results! </div>
+                @php
+                    $testimonials = \App\Models\Testimonial::all();
+                @endphp
+
+                @if (count($testimonials) > 0)
+                    <section class="section mt-50">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="section-title text-center mb-4 pb-2">
+                                        <h2 class="text-center mb-15 wow animate__animated animate__fadeInUp"> Our
+                                            Happy
+                                            Customers </h2>
+                                        <div
+                                            class="font-lg color-text-paragraph-2 text-center wow animate__animated animate__fadeInUp">
+                                            Here Is What Our Users Have to Say: Real Stories, Real Results! </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-50 justify-content-center">
-                            <div class="col-lg-12">
-                                <div class="swiper pb-5" id="testimonial-slider">
-                                    <div class="swiper-wrapper pb-70 pt-5">
-                                        @php
-                                            $testimonials = \App\Models\Testimonial::all();
-                                        @endphp
-                                        @foreach ($testimonials as $testimony)
-                                            <div class="swiper-slide swiper-group-3">
-                                                <div class="card-grid-6 hover-up">
-                                                    <div class="card-text-desc mt-10">
-                                                        <p class="font-md color-text-paragraph">
-                                                            @php
+                            <div class="row mt-50 justify-content-center">
+                                <div class="col-lg-12">
+                                    <div class="swiper pb-5" id="testimonial-slider">
+                                        <div class="swiper-wrapper pb-70 pt-5">
+                                            @foreach ($testimonials as $testimony)
+                                                <div class="swiper-slide swiper-group-3">
+                                                    <div class="card-grid-6 hover-up">
+                                                        <div class="card-text-desc mt-10">
+                                                            <p class="font-md color-text-paragraph">
+                                                                @php
 
-                                                                echo $testimony->testimony;
+                                                                    echo $testimony->testimony;
 
-                                                            @endphp
-                                                        </p>
-                                                    </div>
-                                                    <div class="card-image">
-                                                        <div class="image">
-                                                            <figure><img alt="{{ $testimony->name }}"
-                                                                    src="{{ $testimony->photo }}">
-                                                            </figure>
+                                                                @endphp
+                                                            </p>
                                                         </div>
-                                                        <div class="card-profile">
-                                                            <h6>{{ $testimony->name }}</h6>
-                                                            <span>{{ $testimony->occupation }}</span>
+                                                        <div class="card-image">
+                                                            <div class="image">
+                                                                <figure><img alt="{{ $testimony->name }}"
+                                                                        src="{{ $testimony->photo }}">
+                                                                </figure>
+                                                            </div>
+                                                            <div class="card-profile">
+                                                                <h6>{{ $testimony->name }}</h6>
+                                                                <span>{{ $testimony->occupation }}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                @endif
             </div>
 
         </div>
