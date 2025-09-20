@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Business;
 
 use App\Http\Controllers\Controller;
@@ -41,11 +40,11 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        $jobs = JobListing::where("customer_id", Auth::user()->business->id)->pluck("id");
+        $jobs  = JobListing::where("customer_id", Auth::user()->business->id)->pluck("id");
         $param = [
-            'jobsPosted' => JobListing::where("customer_id", Auth::user()->business->id)->count(),
-            'areteBalance' => Auth::user()->wallet->arete_balance,
-            'referralPoints' => Auth::user()->wallet->referral_points,
+            'jobsPosted'         => JobListing::where("customer_id", Auth::user()->business->id)->count(),
+            'areteBalance'       => Auth::user()->wallet->arete_balance,
+            'referralPoints'     => Auth::user()->wallet->referral_points,
             'activeSubscription' => $activeSubscription = CustomerSubscription::where("customer_id", Auth::user()->id)->where("status", "active")->first(),
         ];
 
@@ -101,10 +100,10 @@ class HomeController extends Controller
     {
         $validatedData = $request->validate([
             'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'gender' => 'required',
-            'country' => 'required',
+            'last_name'  => 'required',
+            'phone'      => 'required',
+            'gender'     => 'required',
+            'country'    => 'required',
         ]);
 
         $parseEmail = Customer::where("email", $request->email)->where("id", "!=", Auth::user()->id)->count();
@@ -113,15 +112,15 @@ class HomeController extends Controller
             return back();
         }
 
-        $user = Auth::user();
+        $user             = Auth::user();
         $user->first_name = $request->first_name;
         $user->first_name = $request->first_name;
-        $user->phone = $request->phone;
-        $user->gender = $request->gender;
-        $user->country = $request->country;
+        $user->phone      = $request->phone;
+        $user->gender     = $request->gender;
+        $user->country    = $request->country;
         if ($request->has('profile_photo')) {
             $uploadedFileUrl = Cloudinary::upload($request->file('profile_photo')->getRealPath())->getSecurePath();
-            $user->photo = $uploadedFileUrl;
+            $user->photo     = $uploadedFileUrl;
         }
 
         if ($user->save()) {
@@ -154,14 +153,14 @@ class HomeController extends Controller
     public function updatePassword(Request $request)
     {
         $validatedData = $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required',
+            'current_password'          => 'required',
+            'new_password'              => 'required',
             'new_password_confirmation' => 'required',
         ]);
 
         $user = Auth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             toast('Invalid current password provided.', 'error');
             return back();
         } else {
@@ -191,7 +190,7 @@ class HomeController extends Controller
      */
     public function businessProfile()
     {
-        $business = Business::where("customer_id", Auth::user()->id)->first();
+        $business   = Business::where("customer_id", Auth::user()->id)->first();
         $categories = PlatformCategories::orderBy("category_name", "asc")->where("category_type", "business")->get();
         return view("business.business_information", compact("business", "categories"));
     }
@@ -199,15 +198,15 @@ class HomeController extends Controller
     public function updateBusinessProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'business_name' => 'required',
-            'business_category' => 'required',
+            'business_name'        => 'required',
+            'business_category'    => 'required',
             'business_description' => 'required',
-            'business_phone' => 'required',
-            'business_email' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'business_address' => 'required',
+            'business_phone'       => 'required',
+            'business_email'       => 'required',
+            'country'              => 'required',
+            'state'                => 'required',
+            'city'                 => 'required',
+            'business_address'     => 'required',
         ]);
 
         if ($request->business_category == "Others") {
@@ -228,41 +227,41 @@ class HomeController extends Controller
             DB::beginTransaction();
 
             if ($request->business_category == "Others") {
-                $platformCat = new PlatformCategories;
+                $platformCat                = new PlatformCategories;
                 $platformCat->category_name = $request->category_name;
-                $platformCat->slug = preg_replace("/ /", "-", strtolower($request->category_name));
+                $platformCat->slug          = preg_replace("/ /", "-", strtolower($request->category_name));
                 $platformCat->save();
-                $businessCategoryId = $platformCat->id;
+                $businessCategoryId   = $platformCat->id;
                 $businessCategoryName = PlatformCategories::find($platformCat->id)->category_name;
             } else {
 
-                $businessCategoryId = $request->business_category;
+                $businessCategoryId   = $request->business_category;
                 $businessCategoryName = PlatformCategories::find($request->business_category)->category_name;
             }
 
-            $business = Business::where("customer_id", Auth::user()->id)->first();
-            $business->business_name = $request->business_name;
-            $business->slug = preg_replace("/ /", "-", strtolower($request->business_name));
-            $business->category_id = $businessCategoryId;
-            $business->business_category = $businessCategoryName;
-            $business->country = $request->country;
-            $business->state = $request->state;
-            $business->city = $request->city;
-            $business->street = $request->business_address;
-            $business->business_address = $request->business_address;
+            $business                       = Business::where("customer_id", Auth::user()->id)->first();
+            $business->business_name        = $request->business_name;
+            $business->slug                 = preg_replace("/ /", "-", strtolower($request->business_name));
+            $business->category_id          = $businessCategoryId;
+            $business->business_category    = $businessCategoryName;
+            $business->country              = $request->country;
+            $business->state                = $request->state;
+            $business->city                 = $request->city;
+            $business->street               = $request->business_address;
+            $business->business_address     = $request->business_address;
             $business->business_description = $request->business_description;
-            $business->business_phone = $request->business_phone;
-            $business->business_email = $request->business_email;
-            $business->website_url = $request->website_url;
-            $business->facebook_url = $request->facebook_url;
-            $business->twitter_url = $request->twitter_url;
-            $business->instagram_url = $request->instagram_url;
-            $business->linkedin_url = $request->linkedin_url;
-            $business->latitude = $request->latitude;
-            $business->longitude = $request->longitude;
-            $business->visibility = 1;
+            $business->business_phone       = $request->business_phone;
+            $business->business_email       = $request->business_email;
+            $business->website_url          = $request->website_url;
+            $business->facebook_url         = $request->facebook_url;
+            $business->twitter_url          = $request->twitter_url;
+            $business->instagram_url        = $request->instagram_url;
+            $business->linkedin_url         = $request->linkedin_url;
+            $business->latitude             = $request->latitude;
+            $business->longitude            = $request->longitude;
+            $business->visibility           = 1;
             if ($request->has('business_logo')) {
-                $uploadedFileUrl = Cloudinary::upload($request->file('business_logo')->getRealPath())->getSecurePath();
+                $uploadedFileUrl         = Cloudinary::upload($request->file('business_logo')->getRealPath())->getSecurePath();
                 $business->business_logo = $uploadedFileUrl;
             }
 
@@ -286,10 +285,10 @@ class HomeController extends Controller
         $businessExist = Business::where("customer_id", Auth::user()->id)->first();
 
         if (isset($businessExist->business_name)) {
-            $business = Business::where("customer_id", Auth::user()->id)->first();
-            $topBanner = BusinessPage::where("business_id", $business->id)->where("file_position", "banner")->first();
+            $business      = Business::where("customer_id", Auth::user()->id)->first();
+            $topBanner     = BusinessPage::where("business_id", $business->id)->where("file_position", "banner")->first();
             $sliderBanners = BusinessPage::where("business_id", $business->id)->where("file_position", "slider")->get();
-            $catalogues = BusinessPage::where("business_id", $business->id)->where("file_position", "catalogue")->get();
+            $catalogues    = BusinessPage::where("business_id", $business->id)->where("file_position", "catalogue")->get();
             return view("business.business_page", compact("business", "topBanner", "sliderBanners", "catalogues"));
         } else {
             toast('Please Complete The Business Information Form to be able to setup your business page.', 'error');
@@ -315,12 +314,12 @@ class HomeController extends Controller
     {
 
         NotificationSetting::where('customer_id', Auth::user()->id)->update([
-            'unusual_activity' => $request->status,
+            'unusual_activity'   => $request->status,
             'new_browser_signin' => $request->status,
-            'latest_news' => $request->status,
-            'features_updates' => $request->status,
-            'account_tips' => $request->status,
-            'all_not' => $request->status,
+            'latest_news'        => $request->status,
+            'features_updates'   => $request->status,
+            'account_tips'       => $request->status,
+            'all_not'            => $request->status,
         ]);
 
         return response()->json(['status' => 'Notification status changed successfully.']);
@@ -346,12 +345,12 @@ class HomeController extends Controller
 
     public function unsubscribeAllNotifications()
     {
-        $notifications = NotificationSetting::where("customer_id", Auth::user()->id)->first();
-        $notifications->unusual_activity = 0;
+        $notifications                     = NotificationSetting::where("customer_id", Auth::user()->id)->first();
+        $notifications->unusual_activity   = 0;
         $notifications->new_browser_signin = 0;
-        $notifications->latest_news = 0;
-        $notifications->features_updates = 0;
-        $notifications->account_tips = 0;
+        $notifications->latest_news        = 0;
+        $notifications->features_updates   = 0;
+        $notifications->account_tips       = 0;
         if ($notifications->save()) {
             toast('You have unsubscribed from all notifications.', 'success');
             return back();
@@ -361,11 +360,16 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * security
+     *
+     * @return void
+     */
     public function security()
     {
-        $google2fa = app('pragmarx.google2fa');
+        $google2fa       = app('pragmarx.google2fa');
         $google2faSecret = $google2fa->generateSecretKey();
-        $QRImage = $google2fa->getQRCodeInline(
+        $QRImage         = $google2fa->getQRCodeInline(
             env('APP_NAME'),
             Auth::user()->email,
             $google2faSecret
@@ -375,7 +379,7 @@ class HomeController extends Controller
 
     public function enableGA(Request $request)
     {
-        $gaCode = $request->google2fa_code;
+        $gaCode   = $request->google2fa_code;
         $gaSecret = $request->google2fa_secret;
 
         if ($gaCode == null || $gaSecret == null) {
@@ -383,9 +387,9 @@ class HomeController extends Controller
             return back();
         }
 
-        $user = Auth::user();
+        $user      = Auth::user();
         $google2fa = app('pragmarx.google2fa');
-        $valid = $google2fa->verifyKey($gaSecret, $gaCode);
+        $valid     = $google2fa->verifyKey($gaSecret, $gaCode);
 
         if ($valid) {
             $user->google2fa_secret = $gaSecret;
@@ -413,7 +417,7 @@ class HomeController extends Controller
         if ($request->param == "google_auth2fa") {
             if (isset($user->google2fa_secret) && $request->status == 1) {
                 $data = [
-                    'id' => Auth::user()->id,
+                    'id'   => Auth::user()->id,
                     'time' => now(),
                 ];
                 Session::put('myGoogle2fa', $data);
@@ -423,7 +427,7 @@ class HomeController extends Controller
                 Session::forget('myGoogle2fa');
             } else {
                 return response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Please Setup Google Authenticator to be able to enable this option.',
                 ]);
             }
@@ -432,8 +436,8 @@ class HomeController extends Controller
         if ($request->param == "email_auth2fa") {
             if ($request->status == 1) {
                 $user->auth_2fa = "Email";
-                $data = [
-                    'id' => Auth::user()->id,
+                $data           = [
+                    'id'   => Auth::user()->id,
                     'time' => now(),
                 ];
                 Session::put('myValid2fa', $data);
@@ -445,12 +449,12 @@ class HomeController extends Controller
 
         if ($user->save()) {
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Authentication 2FA Method Updated Successfully',
             ]);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Something went wrong! Please try again',
             ]);
         }
@@ -469,7 +473,7 @@ class HomeController extends Controller
                 $user->withdrawal_confirmation = null;
             } else {
                 return response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Please Setup Google Authenticator to be able to enable this option.',
                 ]);
             }
@@ -485,12 +489,12 @@ class HomeController extends Controller
 
         if ($user->save()) {
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Withdrawal Confirmation Method Updated Successfully',
             ]);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Something went wrong! Please try again',
             ]);
         }
@@ -504,7 +508,7 @@ class HomeController extends Controller
 
     public function processAccountDeletion()
     {
-        $customer = Auth::user();
+        $customer         = Auth::user();
         $customer->status = "deleted";
         if ($customer->save()) {
             $jobs = JobListing::where("customer_id", Auth::user()->id)->update([
@@ -525,12 +529,12 @@ class HomeController extends Controller
         $filter = request()->filter == null ? 'asc' : request()->filter;
         if (isset($search)) {
             $lastRecord = Products::where("product_name", "LIKE", "%" . $search . "%")->count();
-            $marker = $this->shopMarkers($lastRecord, request()->page);
-            $products = Products::orderBy("id", $filter)->where("product_name", "LIKE", "%" . $search . "%")->paginate(12);
+            $marker     = $this->shopMarkers($lastRecord, request()->page);
+            $products   = Products::orderBy("id", $filter)->where("product_name", "LIKE", "%" . $search . "%")->paginate(12);
         } else {
             $lastRecord = Products::count();
-            $marker = $this->shopMarkers($lastRecord, request()->page);
-            $products = Products::orderBy("id", $filter)->paginate(12);
+            $marker     = $this->shopMarkers($lastRecord, request()->page);
+            $products   = Products::orderBy("id", $filter)->paginate(12);
         }
         return view("business.mini_store", compact("products", "search", "lastRecord", "marker", "filter"));
     }
@@ -540,12 +544,12 @@ class HomeController extends Controller
         $search = request()->q;
         $filter = request()->filter == null ? 'asc' : request()->filter;
         if (isset($search)) {
-            $lastRecord = TutorialVideos::where("video_title", "LIKE", "%" . $search . "%")->count();
-            $marker = $this->academyMarkers($lastRecord, request()->page);
+            $lastRecord     = TutorialVideos::where("video_title", "LIKE", "%" . $search . "%")->count();
+            $marker         = $this->academyMarkers($lastRecord, request()->page);
             $tutorialVideos = TutorialVideos::orderBy("id", $filter)->where("video_title", "LIKE", "%" . $search . "%")->paginate(9);
         } else {
-            $lastRecord = TutorialVideos::count();
-            $marker = $this->academyMarkers($lastRecord, request()->page);
+            $lastRecord     = TutorialVideos::count();
+            $marker         = $this->academyMarkers($lastRecord, request()->page);
             $tutorialVideos = TutorialVideos::orderBy("id", $filter)->paginate(9);
         }
         return view("business.academy", compact("tutorialVideos", "search", "lastRecord", "marker", "filter"));
@@ -561,8 +565,8 @@ class HomeController extends Controller
         if ($pageNum == null) {
             $pageNum = 1;
         }
-        $end = (12 * ((int) $pageNum));
-        $marker = array();
+        $end    = (12 * ((int) $pageNum));
+        $marker = [];
         if ((int) $pageNum == 1) {
             $marker["begin"] = (int) $pageNum;
             $marker["index"] = (int) $pageNum;
@@ -585,8 +589,8 @@ class HomeController extends Controller
         if ($pageNum == null) {
             $pageNum = 1;
         }
-        $end = (9 * ((int) $pageNum));
-        $marker = array();
+        $end    = (9 * ((int) $pageNum));
+        $marker = [];
         if ((int) $pageNum == 1) {
             $marker["begin"] = (int) $pageNum;
             $marker["index"] = (int) $pageNum;
@@ -607,8 +611,8 @@ class HomeController extends Controller
     public function updatePageSettings(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'business_id' => 'required',
-            'banner_type' => 'required',
+            'business_id'       => 'required',
+            'banner_type'       => 'required',
             'catalogue_display' => 'required',
         ]);
 
@@ -619,8 +623,8 @@ class HomeController extends Controller
             return back();
         }
 
-        $business = Business::find($request->business_id);
-        $business->page_banner = $request->banner_type;
+        $business                    = Business::find($request->business_id);
+        $business->page_banner       = $request->banner_type;
         $business->catalogue_display = $request->catalogue_display;
         if ($business->save()) {
             toast('Page Settings Updated Successfully.', 'success');
@@ -636,7 +640,7 @@ class HomeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'business_id' => 'required',
-            'top_banner' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048|dimensions:max_width=1920,max_height=360',
+            'top_banner'  => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048|dimensions:max_width=1920,max_height=360',
         ]);
 
         if ($validator->fails()) {
@@ -647,18 +651,18 @@ class HomeController extends Controller
         }
         try {
 
-            $fileName = $request->file('top_banner')->getClientOriginalName();
-            $byteSize = $request->file('top_banner')->getSize();
-            $fileSize = $this->formatFileSize($byteSize);
+            $fileName      = $request->file('top_banner')->getClientOriginalName();
+            $byteSize      = $request->file('top_banner')->getSize();
+            $fileSize      = $this->formatFileSize($byteSize);
             $fileExtension = $request->file('top_banner')->getClientOriginalExtension();
-            $fileURL = Cloudinary::uploadFile($request->file('top_banner')->getRealPath())->getSecurePath();
+            $fileURL       = Cloudinary::uploadFile($request->file('top_banner')->getRealPath())->getSecurePath();
 
             $bannerExist = BusinessPage::where("business_id", $request->business_id)->where("file_position", "banner")->first();
             if (isset($bannerExist)) {
-                $bannerExist->file_url = $fileURL;
-                $bannerExist->file_url = $fileURL;
-                $bannerExist->file_name = $fileName;
-                $bannerExist->file_size = $fileSize;
+                $bannerExist->file_url       = $fileURL;
+                $bannerExist->file_url       = $fileURL;
+                $bannerExist->file_name      = $fileName;
+                $bannerExist->file_size      = $fileSize;
                 $bannerExist->file_extension = $fileExtension;
                 if ($bannerExist->save()) {
                     toast('Static Page Banner Updated Successfully.', 'success');
@@ -668,13 +672,13 @@ class HomeController extends Controller
                     return back();
                 }
             } else {
-                $banner = new BusinessPage;
-                $banner->business_id = $request->business_id;
-                $banner->file_position = "banner";
-                $banner->file_type = "image";
-                $banner->file_url = $fileURL;
-                $banner->file_name = $fileName;
-                $banner->file_size = $fileSize;
+                $banner                 = new BusinessPage;
+                $banner->business_id    = $request->business_id;
+                $banner->file_position  = "banner";
+                $banner->file_type      = "image";
+                $banner->file_url       = $fileURL;
+                $banner->file_name      = $fileName;
+                $banner->file_size      = $fileSize;
                 $banner->file_extension = $fileExtension;
                 if ($banner->save()) {
                     toast('Static Page Banner Updated Successfully.', 'success');
@@ -693,7 +697,7 @@ class HomeController extends Controller
     public function uploadSliderBanner(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'business_id' => 'required',
+            'business_id'   => 'required',
             'slider_banner' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048|dimensions:max_width=1500,max_height=450',
         ]);
 
@@ -705,19 +709,19 @@ class HomeController extends Controller
         }
 
         try {
-            $fileName = $request->file('slider_banner')->getClientOriginalName();
-            $byteSize = $request->file('slider_banner')->getSize();
-            $fileSize = $this->formatFileSize($byteSize);
+            $fileName      = $request->file('slider_banner')->getClientOriginalName();
+            $byteSize      = $request->file('slider_banner')->getSize();
+            $fileSize      = $this->formatFileSize($byteSize);
             $fileExtension = $request->file('slider_banner')->getClientOriginalExtension();
-            $fileURL = Cloudinary::uploadFile($request->file('slider_banner')->getRealPath())->getSecurePath();
+            $fileURL       = Cloudinary::uploadFile($request->file('slider_banner')->getRealPath())->getSecurePath();
 
-            $banner = new BusinessPage;
-            $banner->business_id = $request->business_id;
-            $banner->file_position = "slider";
-            $banner->file_type = "image";
-            $banner->file_url = $fileURL;
-            $banner->file_name = $fileName;
-            $banner->file_size = $fileSize;
+            $banner                 = new BusinessPage;
+            $banner->business_id    = $request->business_id;
+            $banner->file_position  = "slider";
+            $banner->file_type      = "image";
+            $banner->file_url       = $fileURL;
+            $banner->file_name      = $fileName;
+            $banner->file_size      = $fileSize;
             $banner->file_extension = $fileExtension;
             if ($banner->save()) {
                 toast('Slider Banner Uploaded Successfully.', 'success');
@@ -736,7 +740,7 @@ class HomeController extends Controller
     public function uploadCatalogue(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'business_id' => 'required',
+            'business_id'     => 'required',
             'catalogue_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
@@ -748,19 +752,19 @@ class HomeController extends Controller
         }
         try {
 
-            $fileName = $request->file('catalogue_image')->getClientOriginalName();
-            $byteSize = $request->file('catalogue_image')->getSize();
-            $fileSize = $this->formatFileSize($byteSize);
+            $fileName      = $request->file('catalogue_image')->getClientOriginalName();
+            $byteSize      = $request->file('catalogue_image')->getSize();
+            $fileSize      = $this->formatFileSize($byteSize);
             $fileExtension = $request->file('catalogue_image')->getClientOriginalExtension();
-            $fileURL = Cloudinary::uploadFile($request->file('catalogue_image')->getRealPath())->getSecurePath();
+            $fileURL       = Cloudinary::uploadFile($request->file('catalogue_image')->getRealPath())->getSecurePath();
 
-            $banner = new BusinessPage;
-            $banner->business_id = $request->business_id;
-            $banner->file_position = "catalogue";
-            $banner->file_type = "image";
-            $banner->file_url = $fileURL;
-            $banner->file_name = $fileName;
-            $banner->file_size = $fileSize;
+            $banner                 = new BusinessPage;
+            $banner->business_id    = $request->business_id;
+            $banner->file_position  = "catalogue";
+            $banner->file_type      = "image";
+            $banner->file_url       = $fileURL;
+            $banner->file_name      = $fileName;
+            $banner->file_size      = $fileSize;
             $banner->file_extension = $fileExtension;
             if ($banner->save()) {
                 toast('Business Catalogue Image Uploaded Successfully.', 'success');
@@ -796,7 +800,7 @@ class HomeController extends Controller
     public function formatFileSize($size)
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $i = 0;
+        $i     = 0;
 
         while ($size > 1024) {
             $size /= 1024;
@@ -810,8 +814,8 @@ class HomeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'business_id' => 'required',
-            'rating' => 'required',
-            'review' => 'required',
+            'rating'      => 'required',
+            'review'      => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -820,11 +824,11 @@ class HomeController extends Controller
             return back();
         }
 
-        $review = new BusinessReviews;
+        $review              = new BusinessReviews;
         $review->business_id = $request->business_id;
         $review->customer_id = Auth::user()->id;
-        $review->rating = $request->rating;
-        $review->review = $request->review;
+        $review->rating      = $request->rating;
+        $review->review      = $request->review;
         if ($review->save()) {
             Session::flash("alert-type", "success");
             Session::flash("message", "Review Submitted Successfully.");

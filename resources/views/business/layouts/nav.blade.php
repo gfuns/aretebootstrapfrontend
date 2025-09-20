@@ -45,54 +45,6 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link  collapsed " href="#" data-bs-toggle="collapse" data-bs-target="#navSettings"
-                    aria-expanded="false" aria-controls="navSettings">
-                    <i class="nav-icon bi bi-gear-wide-connected me-2"></i> Account Settings
-                </a>
-                <div id="navSettings" class="collapse " data-bs-parent="#sideNavbar">
-                    <ul class="nav flex-column">
-
-                        <li class="nav-item">
-                            <a class="nav-link " id="profile" href="{{ route('business.viewProfile') }}">
-                                Profile Information
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " id="subscription" href="{{ route('business.subscription') }}">
-                                Billing & Payments
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " id="notification" href="{{ route('business.notificationSettings') }}">
-                                Notifications
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " id="security" href="{{ route('business.security') }}">
-                                Security
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " id="deleteAccount" href="{{ route('business.deleteAccount') }}">
-                                Delete Account
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </li>
-
-
-
-            <li class="nav-item">
-                <div class="nav-divider"></div>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link " id="wallet" href="{{ route('business.myWallet') }}">
                     <i class="nav-icon bi bi-wallet me-2"></i>
                     Wallet
@@ -193,6 +145,53 @@
                 </li>
             @endif
 
+
+            <li class="nav-item">
+                <div class="nav-divider"></div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  collapsed " href="#" data-bs-toggle="collapse" data-bs-target="#navSettings"
+                    aria-expanded="false" aria-controls="navSettings">
+                    <i class="nav-icon bi bi-gear-wide-connected me-2"></i> Account Settings
+                </a>
+                <div id="navSettings" class="collapse " data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+
+                        <li class="nav-item">
+                            <a class="nav-link " id="profile" href="{{ route('business.viewProfile') }}">
+                                Profile Information
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " id="subscription" href="{{ route('business.subscription') }}">
+                                Billing & Payments
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " id="notification" href="{{ route('business.notificationSettings') }}">
+                                Notifications
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " id="security" href="{{ route('business.security') }}">
+                                Security
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " id="deleteAccount" href="{{ route('business.deleteAccount') }}">
+                                Delete Account
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
             <!-- Nav item -->
             <li class="nav-item">
                 <div class="nav-divider"></div>
@@ -200,7 +199,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link " id="help" href="#">
+                <a class="nav-link " id="help" href="javascript:void(Tawk_API.toggle())">
                     <i class="nav-icon bi bi-question-octagon-fill me-2"></i>
                     Get Help
                 </a>
