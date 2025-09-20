@@ -11,7 +11,7 @@
                     <!-- logo -->
                     <div class="header-menu-wrapper align-items-center d-flex">
                         <div class="logo-wrapper">
-                            <a href="{{ route('forum') }}" class="normal-logo" id="normal-logo">
+                            <a href="/" class="normal-logo" id="normal-logo">
                                 <img src="{{ asset('files/general/logo.png') }}" alt="">
                             </a>
                             <a href="{{ route('forum') }}" class="dark-logo hidden" id="dark-logo">
