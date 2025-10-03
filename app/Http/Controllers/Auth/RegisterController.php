@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -72,8 +71,8 @@ class RegisterController extends Controller
         }
 
         return $request->wantsJson()
-        ? new JsonResponse([], 201)
-        : redirect($this->redirectPath());
+            ? new JsonResponse([], 201)
+            : redirect($this->redirectPath());
     }
 
     /**
@@ -85,10 +84,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'first_name'           => ['required', 'string', 'max:255'],
+            'last_name'            => ['required', 'string', 'max:255'],
+            'email'                => ['required', 'string', 'email', 'max:255', 'unique:customers'],
+            'password'             => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => 'required|captcha',
         ]);
     }
 
@@ -103,10 +103,10 @@ class RegisterController extends Controller
 
         return Customer::create([
             'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'last_name'  => $data['last_name'],
+            'email'      => $data['email'],
+            'email'      => $data['email'],
+            'password'   => Hash::make($data['password']),
         ]);
 
     }
