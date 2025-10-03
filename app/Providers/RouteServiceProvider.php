@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
@@ -44,6 +43,23 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('register', function ($request) {
+            return [
+                // Allow 5 registrations per IP per minute
+                Limit::perMinute(5)->by($request->ip()),
+
+                // Optional: also rate limit by email
+                Limit::perMinute(1)->by($request->input('email')),
+
+                // Optional: also rate limit by user agent
+                Limit::perMinute(1)->by($request->header('User-Agent')),
+            ];
+        });
+
+        RateLimiter::for('login', function ($request) {
+            return Limit::perMinute(10)->by($request->ip());
         });
 
         $this->routes(function () {

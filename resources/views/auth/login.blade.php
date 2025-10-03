@@ -65,6 +65,9 @@
                 @endif
                 <form class="validate validate-modern" action="{{ route('login') }}" method="POST">
                     @csrf
+
+                    <x-honeypot />
+
                     <div class="input-item">
                         <input type="email" placeholder="Your Email" data-msg-required="Required."
                             class="input-bordered" name="email" value="{{ old('email') }}" required autofocus>
