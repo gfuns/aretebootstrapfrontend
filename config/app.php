@@ -192,7 +192,7 @@ return [
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
         'Alert'      => RealRashid\SweetAlert\Facades\Alert::class,
         'Excel'      => Maatwebsite\Excel\Facades\Excel::class,
-        'NoCaptcha'  => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+        'Captcha'    => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
     ])->toArray(),
 
 ];

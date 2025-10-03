@@ -116,6 +116,13 @@
                             and <a target="_blank" href="/privacy-policy">Privacy
                                 Policy</a>.</label>
                     </div>
+
+                    <div class="input-item">
+                        {!! NoCaptcha::display() !!}
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                        @endif
+                    </div>
                     <button type="submit" class="btn btn-primary btn-block">Create Account</button>
                 </form>
 
