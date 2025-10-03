@@ -106,6 +106,12 @@
                             class="input-bordered" name="referral_code"
                             @if (isset(request()->ref)) readonly @endif>
                     </div>
+                    <div class="input-item">
+                        {!! NoCaptcha::display() !!}
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                        @endif
+                    </div>
 
                     <div class="input-item text-left">
                         <input name="terms" class="input-checkbox input-checkbox-md" id="agree" type="checkbox"
@@ -115,13 +121,6 @@
                                 Condition</a>
                             and <a target="_blank" href="/privacy-policy">Privacy
                                 Policy</a>.</label>
-                    </div>
-
-                    <div class="input-item">
-                        {!! NoCaptcha::display() !!}
-                        @if ($errors->has('g-recaptcha-response'))
-                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
-                        @endif
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Create Account</button>
                 </form>
@@ -174,7 +173,7 @@
                                     to Home</strong></span></a>
                     </div>
 
-                    <div style="margin-top: 400px; margin-bottom: 150px">
+                    <div style="margin-top: 400px; margin-bottom: 250px">
                         <span style="color:white; font-size: 72px; font-weight:bolder">Welcome to</span>
                         <span style="color:#FEBA00; font-size: 72px; font-weight:bolder"> &nbsp;Arete</span>
 
