@@ -87,18 +87,18 @@
                         <input type="password" placeholder="Password" class="input-bordered" name="password"
                             id="password" minlength="6" data-msg-required="Required."
                             data-msg-minlength="At least 6 chars." required>
-                            <span class="toggle-password" onclick="togglePasswordVisibility()">
-                                <i class="fa fa-eye"></i>
-                            </span>
+                        <span class="toggle-password" onclick="togglePasswordVisibility()">
+                            <i class="fa fa-eye"></i>
+                        </span>
                     </div>
                     <div class="input-item password-toggle">
                         <input type="password" placeholder="Repeat Password" class="input-bordered"
                             name="password_confirmation" data-rule-equalTo="#password" id="password2" minlength="6"
                             data-msg-required="Required." data-msg-equalTo="Enter the same value."
                             data-msg-minlength="At least 6 chars." required>
-                            <span class="toggle-password-2" onclick="togglePassword2Visibility()">
-                                <i class="fa fa-eye"></i>
-                            </span>
+                        <span class="toggle-password-2" onclick="togglePassword2Visibility()">
+                            <i class="fa fa-eye"></i>
+                        </span>
                     </div>
                     <div class="input-item">
                         <input type="text" placeholder="Referral ID"
@@ -110,7 +110,8 @@
                     <div class="input-item text-left">
                         <input name="terms" class="input-checkbox input-checkbox-md" id="agree" type="checkbox"
                             required="required" data-msg-required="You should accept our terms and policy.">
-                        <label for="agree">I agree to the <a target="_blank" href="/terms-and-conditions">Terms and
+                        <label for="agree">I agree to the <a target="_blank" href="/terms-and-conditions">Terms
+                                and
                                 Condition</a>
                             and <a target="_blank" href="/privacy-policy">Privacy
                                 Policy</a>.</label>
@@ -124,6 +125,9 @@
                     Already have an account ? <a href="/login"> <strong>Sign in
                             instead</strong></a>
                 </div>
+
+                {{-- Load the reCAPTCHA script --}}
+                {!! NoCaptcha::renderJs() !!}
             </div>
 
             <div class="page-ath-footer">
@@ -192,37 +196,37 @@
     </script>
 
 
-<script type="text/javascript">
-    function togglePasswordVisibility() {
-        var passwordInput = document.getElementById("password");
-        var icon = document.querySelector(".toggle-password i");
+    <script type="text/javascript">
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            var icon = document.querySelector(".toggle-password i");
 
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
         }
-    }
 
-    function togglePassword2Visibility() {
-        var passwordInput = document.getElementById("password2");
-        var icon = document.querySelector(".toggle-password-2 i");
+        function togglePassword2Visibility() {
+            var passwordInput = document.getElementById("password2");
+            var icon = document.querySelector(".toggle-password-2 i");
 
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 
