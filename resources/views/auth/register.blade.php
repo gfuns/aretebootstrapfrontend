@@ -68,6 +68,9 @@
                 @endif
                 <form class="validate validate-modern" method="POST" action="{{ route('register') }}" id="register">
                     @csrf
+
+                    <x-honeypot />
+
                     <div class="input-item">
                         <input type="text" placeholder="First Name" class="input-bordered" name="first_name"
                             value="{{ old('first_name') }}" minlength="3" data-msg-required="Required."

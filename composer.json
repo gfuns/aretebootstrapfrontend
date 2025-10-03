@@ -25,6 +25,7 @@
         "realrashid/sweet-alert": "^7.1",
         "rollbar/rollbar-laravel": "^8.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-honeypot": "^4.6",
         "stevebauman/location": "^7.2",
         "stripe/stripe-php": "^12.3",
         "symfony/http-client": "^6.3",
