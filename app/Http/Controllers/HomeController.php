@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Mail\AuthenticationOTP as AuthenticationOTP;
@@ -34,8 +33,8 @@ class HomeController extends Controller
     {
         if (Auth::user()->account_type == "business") {
             $businessExist = Business::where("customer_id", Auth::user()->id)->first();
-            if (!isset($businessExist)) {
-                $business = new Business;
+            if (! isset($businessExist)) {
+                $business              = new Business;
                 $business->customer_id = Auth::user()->id;
                 $business->save();
             }
@@ -45,9 +44,9 @@ class HomeController extends Controller
                     if ($otp = CustomerOtp::updateOrCreate(
                         [
                             'customer_id' => Auth::user()->id,
-                            'otp_type' => Auth::user()->auth_2fa,
+                            'otp_type'    => Auth::user()->auth_2fa,
                         ], [
-                            'otp' => $this->generateOtp(),
+                            'otp'            => $this->generateOtp(),
                             'otp_expiration' => Carbon::now()->addMinutes(10),
                         ])) {
 
@@ -76,15 +75,15 @@ class HomeController extends Controller
     public function authy()
     {
         try {
-            $user = Auth::user();
-            $platform = Agent::platform();
-            $ip = "172.70.231.54"; //request()->ip();
-            $location = Location::get($ip);
+            $user       = Auth::user();
+            $platform   = Agent::platform();
+            $ip         = "172.70.231.54"; //request()->ip();
+            $location   = Location::get($ip);
             $deviceInfo = [
-                "device" => $platform . "-" . Agent::version($platform),
-                "browser" => Agent::browser(),
+                "device"     => $platform . "-" . Agent::version($platform),
+                "browser"    => Agent::browser(),
                 "ip_address" => $location->ip,
-                "location" => $location->countryName,
+                "location"   => $location->countryName,
             ];
 
             Mail::to($user)->send(new LoginNotification($user, $deviceInfo));
