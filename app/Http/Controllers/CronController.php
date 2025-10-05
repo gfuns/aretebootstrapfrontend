@@ -293,7 +293,7 @@ class CronController extends Controller
                 $result = json_decode($response);
 
                 if (isset($result)) {
-                    dd($result);
+
                     if ($result->code == "000" && $result->response_description == "TRANSACTION SUCCESSFUL") {
                         $trx                    = UtilityTransactions::find($trans->id);
                         $trx->token             = isset($result->Token) ? $result->Token : $result->mainToken;
